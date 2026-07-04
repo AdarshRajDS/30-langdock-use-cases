@@ -1,36 +1,122 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 30 Days. 30 Langdock Use Cases
 
-## Getting Started
+A premium, modular website showcasing 30 practical AI automation use cases built with Langdock. Each day adds a new workflow documenting real business problems across sales, supply chain, operations, HR, and more.
 
-First, run the development server:
+**Live stack:** Next.js (App Router) · TypeScript · Tailwind CSS
+
+## Quick start
+
+```bash
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+## Adding a new use case (Day 3, 4, …)
+
+You only need to edit **one file** and optionally add images.
+
+### 1. Add a new entry to `src/data/useCases.ts`
+
+Append a new object to the `useCases` array (currently 2 published — grows by one each day):
+
+```typescript
+{
+  day: 3,
+  title: "Purchase Order Confirmation Mismatch Checker",
+  slug: "purchase-order-confirmation-mismatch-checker",
+  category: "Supply Chain",
+  status: "published",  // ← change this
+  summary: "Your one-line summary...",
+  businessProblem: "...",
+  whyItMatters: ["...", "..."],
+  workflow: ["Step 1", "Step 2", "..."],
+  architecture: {
+    description: "...",
+    steps: ["...", "..."],
+  },
+  tools: ["Langdock", "Gmail", "..."],
+  langdockRole: ["...", "..."],
+  businessValue: ["...", "..."],
+  extensions: ["...", "..."],
+  images: {
+    workflowImage: "/use-cases/day-03/workflow.png",
+    architectureDiagram: "/use-cases/day-03/architecture.png",
+  },
+}
+```
+
+The homepage grid, featured section, filters, and detail page update automatically — no other code changes required.
+
+### 2. Add images (optional)
+
+Place images in the public folder:
+
+```
+public/use-cases/day-03/
+  workflow.png          # Langdock workflow canvas
+  architecture.png      # Architecture overview diagram
+```
+
+If images are missing, the site shows a styled placeholder: **"Workflow image coming soon"**.
+
+### 3. Preview
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit `/use-cases/purchase-order-confirmation-mismatch-checker` to review the detail page.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+  app/
+    page.tsx                    # Homepage
+    use-cases/[slug]/page.tsx   # Dynamic use case pages
+    opengraph-image.tsx         # OG image for LinkedIn sharing
+  components/
+    home/                       # Hero, CTA, Why Langdock, etc.
+    use-cases/                  # Cards, grid, filters, detail sections
+    layout/                     # Header, Footer
+  data/
+    useCases.ts                 # ← Edit this daily
+    site.ts                     # Site config, author links
+  lib/
+    useCases.ts                 # Helper functions
+  types/
+    useCase.ts                  # TypeScript types
+public/
+  use-cases/day-XX/             # Optional images per day
+```
 
-## Learn More
+## Pages
 
-To learn more about Next.js, take a look at the following resources:
+| Route | Description |
+|-------|-------------|
+| `/` | Homepage with published use cases, filters, and challenge intro |
+| `/use-cases/[slug]` | Full use case detail page with workflow, architecture, and navigation |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Author
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Built by **Adarsh Raj** — Applied AI Engineer & Data Scientist
 
-## Deploy on Vercel
+- [LinkedIn](https://www.linkedin.com/in/adarsh-raj-ds/)
+- [GitHub](https://github.com/AdarshRajDS)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Day 1 live demo: [AI Maturity Assessment](https://glowing-bonbon-f9fc9a.netlify.app/#assessment)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deploy
+
+```bash
+npm run build
+npm start
+```
+
+Works on Vercel, Netlify, or any Node.js host.
+
+## License
+
+Private project — all rights reserved.

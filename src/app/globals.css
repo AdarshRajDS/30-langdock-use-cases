@@ -1,26 +1,115 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* CauseHouse palette — https://www.causehouse.co/ */
+  --background: #f7f0e6;
+  --foreground: #1d2b1f;
+  --muted: #6b7a6d;
+  --cream: #f7f0e6;
+  --cream-dark: #f0e8dc;
+  --charcoal: #1d2b1f;
+  --green: #bfea4b;
+  --green-light: #e4f4c8;
+  --green-soft: #b9d9c4;
+  --green-dark: #3d5c40;
+  --border: #1d2b1f;
+  --card: #f7f0e6;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-muted: var(--muted);
+  --color-cream: var(--cream);
+  --color-cream-dark: var(--cream-dark);
+  --color-charcoal: var(--charcoal);
+  --color-green: var(--green);
+  --color-green-light: var(--green-light);
+  --color-green-soft: var(--green-soft);
+  --color-green-dark: var(--green-dark);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-fraunces);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+::selection {
+  background: var(--green-soft);
+  color: var(--charcoal);
+}
+
+.section-container {
+  @apply mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8;
+}
+
+.editorial-heading {
+  font-family: var(--font-fraunces), Georgia, serif;
+  @apply tracking-tight;
+}
+
+/* CauseHouse paper-card system */
+.paper-card {
+  @apply rounded-2xl border-2 border-charcoal bg-cream transition-all duration-200;
+  box-shadow: 4px 4px 0 0 var(--charcoal);
+}
+
+.paper-card:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 0 var(--charcoal);
+}
+
+.paper-card-static {
+  @apply rounded-2xl border-2 border-charcoal bg-cream;
+  box-shadow: 4px 4px 0 0 var(--charcoal);
+}
+
+.eyebrow {
+  @apply inline-flex items-center gap-2 rounded-full border-2 border-charcoal bg-green px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-charcoal;
+}
+
+.chapter-label {
+  @apply text-xs font-bold uppercase tracking-widest text-green-dark;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-full border-2 border-charcoal bg-green px-6 py-3 text-sm font-bold text-charcoal transition-all duration-200;
+  box-shadow: 4px 4px 0 0 var(--charcoal);
+}
+
+.btn-primary:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 0 var(--charcoal);
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center rounded-full border-2 border-charcoal bg-cream px-6 py-3 text-sm font-bold text-charcoal transition-all duration-200;
+  box-shadow: 4px 4px 0 0 var(--charcoal);
+}
+
+.btn-secondary:hover {
+  @apply bg-green-light;
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 0 var(--charcoal);
+}
+
+.decorative-line {
+  @apply mb-6 h-0.5 w-16 bg-charcoal;
+}
+
+.green-band {
+  @apply border-y-2 border-charcoal bg-green;
+}
+
+.green-soft-band {
+  @apply border-y-2 border-charcoal bg-green-soft;
 }
