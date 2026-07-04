@@ -6,9 +6,10 @@ function dayFolder(day: number): string {
 
 function imagePaths(day: number) {
   const folder = `/use-cases/day-${dayFolder(day)}`;
+  const version = "v2";
   return {
-    workflowImage: `${folder}/workflow.png`,
-    architectureDiagram: `${folder}/architecture.png`,
+    workflowImage: `${folder}/workflow.png?${version}`,
+    architectureDiagram: `${folder}/architecture.png?${version}`,
   };
 }
 

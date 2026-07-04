@@ -35,6 +35,7 @@ export function DiagramBlock({ src, alt, label }: DiagramBlockProps) {
         alt={alt}
         width={1400}
         height={900}
+        unoptimized
         className="h-auto w-full object-contain"
         sizes="(max-width: 768px) 100vw, 900px"
         onError={() => setError(true)}
