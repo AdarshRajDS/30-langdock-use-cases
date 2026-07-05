@@ -59,6 +59,34 @@ export function filterUseCases(
   });
 }
 
+export function getNavSections(useCase: UseCase) {
+  const sections = [
+    { id: "problem", label: "Business problem" },
+    { id: "why", label: "Why it matters" },
+    { id: "workflow", label: "Workflow" },
+    { id: "architecture", label: "Architecture" },
+    { id: "tools", label: "Tools" },
+    { id: "langdock", label: "Langdock role" },
+  ];
+
+  if (useCase.riskLogic) {
+    sections.push({ id: "risk-logic", label: "Risk logic" });
+  }
+
+  sections.push(
+    { id: "business-value", label: "Business value" },
+    { id: "extensions", label: "Extensions" }
+  );
+
+  if (useCase.governance) {
+    sections.push({ id: "governance", label: "Governance" });
+  }
+
+  sections.push({ id: "diagrams", label: "Diagrams" });
+
+  return sections;
+}
+
 export function getCategoryIcon(category: UseCaseCategory): string {
   const icons: Record<UseCaseCategory, string> = {
     Sales: "◉",

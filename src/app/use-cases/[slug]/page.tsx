@@ -6,6 +6,8 @@ import { WorkflowSteps } from "@/components/use-cases/WorkflowSteps";
 import { BusinessValueCards } from "@/components/use-cases/BusinessValueCards";
 import { ExtensionIdeas } from "@/components/use-cases/ExtensionIdeas";
 import { UseCaseImagesSection } from "@/components/use-cases/ImageBlock";
+import { RiskLogicSection } from "@/components/use-cases/RiskLogicSection";
+import { GovernanceSection } from "@/components/use-cases/GovernanceSection";
 import { UseCaseNav } from "@/components/use-cases/UseCaseNav";
 import {
   StickySideNav,
@@ -13,7 +15,11 @@ import {
 } from "@/components/use-cases/StickySideNav";
 import { siteConfig } from "@/data/site";
 import { useCases } from "@/data/useCases";
-import { getUseCaseBySlug, getAdjacentUseCases } from "@/lib/useCases";
+import {
+  getUseCaseBySlug,
+  getAdjacentUseCases,
+  getNavSections,
+} from "@/lib/useCases";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -33,35 +39,25 @@ export async function generateMetadata({
     return { title: "Use case not found" };
   }
 
-  const title = `Day ${useCase.day}: ${useCase.title}`;
+  const title =
+    useCase.seoTitle ?? `Day ${useCase.day}: ${useCase.title}`;
+  const description = useCase.seoDescription ?? useCase.summary;
 
   return {
     title,
-    description: useCase.summary,
+    description,
     openGraph: {
       title,
-      description: useCase.summary,
+      description,
       type: "article",
     },
     twitter: {
       card: "summary_large_image",
       title,
-      description: useCase.summary,
+      description,
     },
   };
 }
-
-const navSections = [
-  { id: "problem", label: "Business problem" },
-  { id: "why", label: "Why it matters" },
-  { id: "workflow", label: "Workflow" },
-  { id: "architecture", label: "Architecture" },
-  { id: "tools", label: "Tools" },
-  { id: "langdock", label: "Langdock role" },
-  { id: "business-value", label: "Business value" },
-  { id: "extensions", label: "Extensions" },
-  { id: "diagrams", label: "Diagrams" },
-];
 
 export default async function UseCasePage({ params }: PageProps) {
   const { slug } = await params;
@@ -72,6 +68,7 @@ export default async function UseCasePage({ params }: PageProps) {
   }
 
   const { previous, next } = getAdjacentUseCases(useCase.day);
+  const navSections = getNavSections(useCase);
 
   return (
     <>
@@ -87,7 +84,7 @@ export default async function UseCasePage({ params }: PageProps) {
               <h2 className="editorial-heading mb-4 text-2xl font-bold text-charcoal sm:text-3xl">
                 Business problem
               </h2>
-              <p className="text-lg text-muted leading-relaxed">
+              <p className="text-lg text-muted leading-relaxed whitespace-pre-line">
                 {useCase.businessProblem}
               </p>
             </section>
@@ -172,14 +169,24 @@ export default async function UseCasePage({ params }: PageProps) {
               </ul>
             </section>
 
+            {useCase.riskLogic && (
+              <RiskLogicSection riskLogic={useCase.riskLogic} />
+            )}
+
             <BusinessValueCards values={useCase.businessValue} />
+
             <ExtensionIdeas extensions={useCase.extensions} />
+
+            {useCase.governance && (
+              <GovernanceSection items={useCase.governance} />
+            )}
 
             <UseCaseImagesSection
               title={useCase.title}
               workflowImage={useCase.images.workflowImage}
               architectureDiagram={useCase.images.architectureDiagram}
               videoUrl={useCase.images.videoUrl}
+              architectureCaption={useCase.architecture.diagramCaption}
             />
 
             <div className="paper-card-static bg-green p-8 text-center sm:p-10">

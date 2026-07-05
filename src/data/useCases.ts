@@ -6,7 +6,7 @@ function dayFolder(day: number): string {
 
 function imagePaths(day: number) {
   const folder = `/use-cases/day-${dayFolder(day)}`;
-  const version = "v3";
+  const version = "v4";
   return {
     workflowImage: `${folder}/workflow.png?${version}`,
     architectureDiagram: `${folder}/architecture.png?${version}`,
@@ -236,6 +236,124 @@ export const useCases: UseCase[] = [
       "Package handover logic as a reusable Langdock skill",
     ],
     images: imagePaths(3),
+  },
+  {
+    day: 4,
+    title: "Inventory Stockout Early Warning Agent",
+    slug: "day-4-inventory-stockout-early-warning",
+    category: "Supply Chain",
+    categoryLabel: "Supply Chain / Inventory Planning / Production Planning",
+    status: "published",
+    summary:
+      "A Langdock workflow that monitors open demand, inventory balance, and purchase orders to detect stockout risk before production or customer delivery is affected.",
+    businessProblem:
+      "In many operations teams, inventory shortage risk is still checked manually. Planners move between ERP screens, spreadsheets, purchase order lists, supplier updates, and production demand to answer one basic question: will we have enough stock before the demand date?\n\nThe problem is not only low stock. The real problem is late visibility.\n\nWhen stock, demand, open purchase orders, ETA, lead time, and planner ownership are not connected, teams discover shortages only after the risk has already become urgent. This creates production delays, emergency purchasing, expedited freight, supplier firefighting, and poor customer communication.",
+    whyItMatters: [
+      "Stockouts are often discovered too late — when production is already planned, a work order is released, or a customer order is at risk.",
+      "Inventory shortages are common, but a material may look available in one system while demand, reservations, PO timing, and supplier ETA tell a different story.",
+      "Data is scattered across inventory records, open demand, purchase orders, supplier updates, and planning files — making shortage detection slow, reactive, and inconsistent.",
+      "Manual checking between systems means planners answer the same question repeatedly without a connected view of risk.",
+      "Late visibility drives emergency expediting, production delays, and poor customer communication that could be avoided with earlier alerts.",
+    ],
+    workflow: [
+      "Manual or scheduled trigger starts the workflow",
+      "Langdock reads Open Demand from Airtable",
+      "Langdock loops through each open demand item",
+      "Langdock builds item context using item code, order reference, demand date, and demand quantity",
+      "Langdock reads matching Inventory Balance",
+      "Langdock reads matching Purchase Orders",
+      "Langdock reads Item Master for item name, buyer, planner, supplier, lead time, and criticality",
+      "Langdock builds an enriched business context",
+      "Deterministic risk scoring calculates projected availability, shortage quantity, and risk level",
+      "AI analysis is used only for Medium or High risk cases or when data is unclear",
+      "Langdock writes the result to Airtable Stockout Risk Log",
+      "Langdock sends a Slack alert to the planner only for Medium or High risk",
+      "Open risk cases can be followed up and escalated",
+    ],
+    architecture: {
+      description:
+        "Langdock acts as the intelligence and orchestration layer. Airtable stores operational data as a mock ERP, while Langdock reads records, validates context, calculates stockout risk, decides whether action is needed, sends Slack alerts, and logs cases for follow-up.",
+      steps: [
+        "Trigger (manual or scheduled)",
+        "Read open demand from Airtable",
+        "Build and validate item context",
+        "Enrich with inventory, PO, and item master data",
+        "Score stockout risk (deterministic first)",
+        "Act on medium and high risk (Slack alert)",
+        "Log case to Airtable risk log",
+        "Follow up and escalate open cases",
+      ],
+      diagramCaption:
+        "Airtable acts as the operational database, while Langdock orchestrates risk scoring, Slack alerts, and Airtable logging.",
+    },
+    tools: [
+      "Langdock Workflow",
+      "Airtable (mock ERP / operational database)",
+      "Slack (planner alerts)",
+      "Google Workspace (optional documentation & reporting)",
+    ],
+    langdockRole: [
+      "Reads open demand, inventory balance, purchase orders, and item master from Airtable",
+      "Loops through each demand item and builds enriched business context",
+      "Calculates projected availability, shortage quantity, and risk level using deterministic rules first",
+      "Uses AI analysis only for medium or high risk cases, or when data is unclear",
+      "Writes every risk decision to the Airtable Stockout Risk Log for auditability",
+      "Sends Slack alerts to planners for medium and high risk cases only",
+      "Keeps low-risk cases logged without unnecessary AI calls or notifications",
+    ],
+    riskLogic: {
+      high: [
+        "Demand exceeds projected available stock before the demand date",
+        "Incoming PO arrives after the demand date",
+        "No relevant open PO exists",
+        "ETA is missing or delayed",
+        "Critical or express demand may affect production or customer delivery",
+      ],
+      medium: [
+        "Stock can cover demand only if incoming PO arrives on time",
+        "Stock cover is low",
+        "PO ETA is close to demand date",
+        "Planner monitoring is needed",
+      ],
+      low: [
+        "Current stock and confirmed incoming supply cover open demand",
+        "No immediate production or customer impact is identified",
+      ],
+    },
+    businessValue: [
+      "Earlier shortage visibility before production or delivery is affected",
+      "Fewer production delays from late-discovered material gaps",
+      "Less emergency expediting and supplier firefighting",
+      "Better planner prioritisation with clear risk classification",
+      "Clear ownership and follow-up through logged risk cases",
+      "Stronger audit trail for every risk decision",
+      "Better customer delivery reliability",
+      "Lower firefighting across supply chain teams",
+    ],
+    extensions: [
+      "Replace Airtable with ERPNext, SAP, Oracle, Dynamics, or Odoo",
+      "Connect WMS for warehouse-level stock visibility",
+      "Add supplier portal for ETA confirmation",
+      "Add Slack escalation for overdue high-risk cases",
+      "Add Gmail-triggered urgent stockout checks",
+      "Add weekly shortage trend reporting and dashboard",
+      "Add customer order delay communication as a follow-up workflow",
+    ],
+    governance: [
+      "Airtable is used only for the approved inventory stockout risk purpose",
+      "Only minimum required operational data is processed",
+      "No supplier email is sent automatically",
+      "No purchase order or financial commitment is created automatically",
+      "High-risk cases require human review",
+      "Missing or unclear information is marked instead of guessed",
+      "Every risk decision is logged for auditability",
+      "Slack alerts are internal planner notifications only",
+    ],
+    seoTitle:
+      "Day 4: Inventory Stockout Early Warning Agent | Langdock Use Cases",
+    seoDescription:
+      "A practical Langdock workflow that detects inventory stockout risk early by connecting open demand, inventory balance, purchase orders, Slack alerts, and Airtable risk logging.",
+    images: imagePaths(4),
   },
 ];
 

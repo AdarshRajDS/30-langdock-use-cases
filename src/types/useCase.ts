@@ -22,6 +22,13 @@ export interface UseCaseImages {
 export interface UseCaseArchitecture {
   description: string;
   steps: string[];
+  diagramCaption?: string;
+}
+
+export interface UseCaseRiskLogic {
+  high: string[];
+  medium: string[];
+  low: string[];
 }
 
 export interface UseCase {
@@ -40,6 +47,15 @@ export interface UseCase {
   businessValue: string[];
   extensions: string[];
   images: UseCaseImages;
+  /** Optional display label, e.g. "Supply Chain / Inventory Planning" */
+  categoryLabel?: string;
+  /** Optional risk classification rules */
+  riskLogic?: UseCaseRiskLogic;
+  /** Optional governance and responsible AI notes */
+  governance?: string[];
+  /** Optional SEO overrides */
+  seoTitle?: string;
+  seoDescription?: string;
   /** Optional link to live demo or related project */
   liveDemoUrl?: string;
 }

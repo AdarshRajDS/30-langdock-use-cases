@@ -49,6 +49,7 @@ interface UseCaseImagesSectionProps {
   workflowImage?: string;
   architectureDiagram?: string;
   videoUrl?: string;
+  architectureCaption?: string;
 }
 
 export function UseCaseImagesSection({
@@ -56,6 +57,7 @@ export function UseCaseImagesSection({
   workflowImage,
   architectureDiagram,
   videoUrl,
+  architectureCaption,
 }: UseCaseImagesSectionProps) {
   return (
     <section id="diagrams" className="scroll-mt-24">
@@ -66,7 +68,8 @@ export function UseCaseImagesSection({
         <div>
           <p className="chapter-label mb-3">Architecture overview</p>
           <p className="mb-4 text-sm text-muted">
-            End-to-end flow from trigger to integrations and business value.
+            {architectureCaption ??
+              "End-to-end flow from trigger to integrations and business value."}
           </p>
           <DiagramBlock
             src={architectureDiagram}

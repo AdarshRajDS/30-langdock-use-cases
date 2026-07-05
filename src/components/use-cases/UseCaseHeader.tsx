@@ -16,6 +16,11 @@ export function UseCaseHeader({ useCase }: UseCaseHeaderProps) {
           <span className="rounded-full border-2 border-charcoal bg-green-soft px-3 py-1 text-xs font-bold text-charcoal">
             {useCase.category}
           </span>
+          {useCase.categoryLabel && (
+            <span className="rounded-full border-2 border-charcoal bg-cream px-3 py-1 text-xs font-bold text-muted">
+              {useCase.categoryLabel}
+            </span>
+          )}
         </div>
 
         <div className="grid gap-8 lg:grid-cols-[auto_1fr] lg:items-start lg:gap-12">
