@@ -6,7 +6,7 @@ function dayFolder(day: number): string {
 
 function imagePaths(day: number) {
   const folder = `/use-cases/day-${dayFolder(day)}`;
-  const version = "v4";
+  const version = "v5";
   return {
     workflowImage: `${folder}/workflow.png?${version}`,
     architectureDiagram: `${folder}/architecture.png?${version}`,
@@ -354,6 +354,122 @@ export const useCases: UseCase[] = [
     seoDescription:
       "A practical Langdock workflow that detects inventory stockout risk early by connecting open demand, inventory balance, purchase orders, Slack alerts, and Airtable risk logging.",
     images: imagePaths(4),
+  },
+  {
+    day: 5,
+    title: "Machine Breakdown & Downtime Response Agent",
+    slug: "machine-breakdown-downtime-response-agent",
+    category: "Maintenance",
+    categoryLabel: "Maintenance / Production / Operations",
+    status: "published",
+    summary:
+      "A Langdock workflow that helps maintenance and production teams turn incomplete breakdown reports into structured triage, impact assessment, alerts, and follow-up logs.",
+    businessProblem:
+      "Machine breakdowns are not only technical problems. They are coordination problems.\n\nWhen a machine breaks down, the first update often comes through incomplete or informal channels such as operator notes, forms, emails, Slack messages, or shift handovers.\n\nMaintenance teams then need to quickly understand: which machine failed, what is the issue, whether production is stopped or slowed, whether there is a safety concern, whether the machine is critical, whether spare parts are available, whether there is already an open maintenance ticket, which team should act first, and what the production impact is.\n\nWhen this triage is manual, response time slows down, downtime increases, and production, planning, and maintenance teams lose visibility.",
+    whyItMatters: [
+      "When a machine breaks down, the first report is often incomplete — it may come from an operator note, form, email, Slack message, or shift handover.",
+      "Maintenance teams lose time checking machine criticality, production impact, spare part availability, open tickets, safety concern, and urgency.",
+      "Manual triage delays response and increases downtime while maintenance, production, and planning teams work from different information.",
+      "Without structured severity classification, teams either over-react to minor issues or under-prioritise critical breakdowns.",
+      "Unlogged breakdown cases make follow-up, accountability, and downtime trend analysis difficult.",
+    ],
+    workflow: [
+      "Trigger: A machine breakdown report is submitted through a Langdock form, email, or Slack message",
+      "Extract: Langdock extracts machine ID, line, symptoms, downtime start, production status, safety concern, and operator note",
+      "Validate: Langdock checks whether required fields are missing or unclear",
+      "Enrich: Langdock looks up machine master data, production plan, spare parts inventory, and open maintenance tickets from Airtable",
+      "Decide: Langdock classifies severity as High, Medium, or Low based on production impact, machine criticality, safety concern, spare part status, and open tickets",
+      "Generate: Langdock creates a maintenance triage summary, recommended action, production impact note, and Slack alert",
+      "Act: Langdock sends the alert to the maintenance or production support Slack channel",
+      "Log: Langdock creates a breakdown case in Airtable",
+      "Follow up: The case can later be checked for unresolved high-priority breakdowns or overdue actions",
+    ],
+    architecture: {
+      description:
+        "Input channels feed breakdown reports into Langdock, which extracts and validates the issue, enriches context from Airtable as a mock CMMS and production system, classifies severity, sends Slack alerts, and logs every case for follow-up.",
+      steps: [
+        "Input: Langdock form, email, Slack, or shift note",
+        "AI extraction and validation",
+        "Airtable lookups (machine, production, spares, tickets)",
+        "Severity decision (High / Medium / Low)",
+        "Slack alert to maintenance or production support",
+        "Airtable breakdown log",
+        "Follow-up on open high-priority cases",
+      ],
+      diagramCaption:
+        "Airtable acts as mock CMMS and production context, while Langdock orchestrates breakdown triage, severity classification, Slack alerts, and downtime logging.",
+    },
+    tools: [
+      "Langdock Workflow",
+      "Airtable (mock CMMS / production / spare parts)",
+      "Slack (maintenance & production support alerts)",
+      "Gmail or Langdock form trigger (optional)",
+    ],
+    langdockRole: [
+      "Receives messy breakdown reports from forms, email, Slack, or shift notes",
+      "Extracts machine ID, symptoms, downtime start, production status, and safety signals",
+      "Validates missing or unclear information before continuing",
+      "Looks up machine master, production plan, spare parts, and open tickets from Airtable",
+      "Classifies severity based on production impact, criticality, safety, and spare part status",
+      "Generates maintenance triage summary, recommended action, and Slack alert",
+      "Logs every breakdown case in Airtable for auditability and follow-up",
+    ],
+    riskLogic: {
+      high: [
+        "Production is stopped or severely impacted",
+        "Safety concern is flagged and requires immediate attention",
+        "Critical machine or bottleneck line is affected",
+        "Required spare parts are unavailable or lead time is too long",
+        "No open maintenance ticket exists for a recurring or escalating issue",
+      ],
+      medium: [
+        "Production is slowed but not fully stopped",
+        "Machine criticality requires monitoring but issue may be contained",
+        "Spare part availability is uncertain or replacement is in progress",
+        "Open maintenance ticket exists but resolution is still pending",
+      ],
+      low: [
+        "Minor issue with limited production impact",
+        "Machine can continue operating with monitoring",
+        "Spare parts are available and maintenance can be scheduled",
+        "Existing open ticket already covers the reported issue",
+      ],
+    },
+    businessValue: [
+      "Faster maintenance triage from incomplete breakdown reports",
+      "Lower downtime through quicker coordination between teams",
+      "Better production-maintenance coordination with shared context",
+      "Clearer prioritisation using structured severity classification",
+      "Reduced emergency escalation from late-discovered issues",
+      "Better spare part visibility at the point of breakdown",
+      "Structured breakdown history for trend analysis",
+      "Improved follow-up and accountability through logged cases",
+    ],
+    extensions: [
+      "Connect CMMS for real maintenance ticket management",
+      "Integrate MES for live production line status",
+      "Replace Airtable with ERPNext, SAP PM, Oracle Maintenance, or Dynamics 365 Field Service",
+      "Connect dedicated spare parts inventory system",
+      "Add production planning system integration for impact forecasting",
+      "Add Microsoft Teams alerts alongside Slack",
+      "Add escalation for overdue high-priority breakdown cases",
+      "Build weekly downtime trend dashboard and recurring issue detection",
+    ],
+    governance: [
+      "No autonomous machine restart",
+      "No autonomous safety clearance",
+      "No bypassing of machine guards, sensors, alarms, or interlocks",
+      "No unnecessary personal employee data",
+      "High-severity cases require human review",
+      "Unclear safety status requires human confirmation",
+      "Recommendations should be operational, not detailed repair instructions",
+      "Every action should be logged for auditability",
+    ],
+    seoTitle:
+      "Day 5: Machine Breakdown & Downtime Response Agent | Langdock Use Cases",
+    seoDescription:
+      "A Langdock workflow that turns messy machine breakdown reports into structured downtime response with Airtable context, severity classification, Slack alerts, and an auditable log.",
+    images: imagePaths(5),
   },
 ];
 
