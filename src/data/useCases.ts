@@ -6,7 +6,7 @@ function dayFolder(day: number): string {
 
 function imagePaths(day: number) {
   const folder = `/use-cases/day-${dayFolder(day)}`;
-  const version = "v5";
+  const version = "v6";
   return {
     workflowImage: `${folder}/workflow.png?${version}`,
     architectureDiagram: `${folder}/architecture.png?${version}`,
@@ -470,6 +470,129 @@ export const useCases: UseCase[] = [
     seoDescription:
       "A Langdock workflow that turns messy machine breakdown reports into structured downtime response with Airtable context, severity classification, Slack alerts, and an auditable log.",
     images: imagePaths(5),
+  },
+  {
+    day: 6,
+    title: "IT Incident Triage Agent with Human Review",
+    slug: "it-incident-triage-agent-with-human-review",
+    category: "Operations",
+    categoryLabel: "IT Operations / ITSM / Responsible AI",
+    status: "published",
+    summary:
+      "A Langdock workflow that receives messy IT requests, extracts and validates incident data, enriches the ticket with user and system context, recommends a triage decision, applies a policy gate, and either auto-routes safe tickets or pauses risky tickets for human review.",
+    businessProblem:
+      "IT requests often arrive through different channels such as forms, email, Slack, Teams, or ITSM portals. The request text is usually incomplete or unstructured. IT teams then spend time manually identifying the affected system, business impact, priority, resolver group, known incident match, and whether the case is safe to route automatically.\n\nThe real pain point is not ticket creation. The real pain point is consistent triage, safe routing, and auditability before action.",
+    whyItMatters: [
+      "Employees submit IT issues in messy natural language through forms, email, Slack, Teams, or ITSM portals.",
+      "Manual triage slows down resolution and creates inconsistent priority, routing, and escalation decisions.",
+      "Risky cases such as P1/P2, security incidents, low-confidence recommendations, privileged access requests, or active outage matches should not be handled fully automatically.",
+      "Without structured validation, IT teams repeatedly chase missing fields like affected system, business impact, and urgency.",
+      "Unlogged triage decisions make it difficult to audit AI recommendations, policy outcomes, and final actions.",
+    ],
+    workflow: [
+      "Trigger IT Request: A request arrives via Langdock form, email, Slack, Teams, or ITSM portal",
+      "Extract Incident Core: Langdock extracts requester, issue text, source, and timestamp",
+      "Extract Incident Details: Langdock extracts issue summary, affected system, business impact, urgency, and symptoms",
+      "Validate Incident Completeness: Langdock checks whether required fields are missing or unclear",
+      "Enrich User and System Context: Langdock looks up user directory, CMDB, known incidents, resolver mapping, and SLA policy",
+      "Generate Triage Recommendation: Langdock recommends category, priority, resolver group, and confidence score",
+      "Policy Gate: Langdock applies rules to decide auto-route vs human review",
+      "Auto Route Ticket OR Human Review Notification: Safe tickets route automatically; risky tickets pause for approval",
+      "Execute Approved Triage: Langdock creates or updates the ticket after approval or auto-route decision",
+      "Notify Requester: Langdock sends confirmation or status update to the requester",
+      "Notify Resolver Team: Langdock alerts the assigned resolver group via Slack or Teams",
+      "Write Audit Log: Langdock logs AI output, policy decision, confidence score, and final action",
+      "Optional Follow-up Open Actions: Unresolved P1/P2 cases can be tracked for overdue follow-up",
+    ],
+    architecture: {
+      description:
+        "Input channels feed messy IT requests into Langdock, which extracts and validates incident data, enriches context from mock enterprise sources, generates a triage recommendation, applies a policy gate, and either auto-routes safe tickets or sends risky cases to human review before notifying and logging.",
+      steps: [
+        "Input: Langdock form, email, Slack, Teams, or ITSM portal",
+        "AI extraction and validation",
+        "Enterprise context lookup (user, CMDB, incidents, resolver, SLA)",
+        "Triage recommendation with confidence score",
+        "Policy gate (auto-route vs human review)",
+        "Execute action, notify requester and resolver",
+        "Audit log and follow-up",
+      ],
+      diagramCaption:
+        "Langdock orchestrates IT incident triage with a policy gate that routes safe tickets automatically and pauses risky cases for human review before action.",
+    },
+    tools: [
+      "Langdock Workflow",
+      "Langdock Form",
+      "Email",
+      "Slack / Microsoft Teams",
+      "ITSM portal (mock)",
+      "Mock user directory",
+      "Mock CMDB",
+      "Mock known incidents & resolver mapping",
+      "Future: ServiceNow / Jira integration",
+    ],
+    langdockRole: [
+      "Receives messy IT requests from forms, email, Slack, Teams, or ITSM portals",
+      "Extracts structured incident data including system, impact, urgency, and symptoms",
+      "Validates missing or unclear fields before continuing",
+      "Enriches incidents with user directory, CMDB, known incidents, and resolver context",
+      "Generates triage recommendation with category, priority, and confidence score",
+      "Applies policy gate to decide auto-route vs human review",
+      "Notifies requester and resolver team after approved triage",
+      "Logs full decision trail including AI output, policy outcome, and final action",
+    ],
+    policyGate: {
+      humanReview: [
+        "Priority is P1 or P2",
+        "Category is Security",
+        "Confidence score is below 0.85",
+        "Resolver group is missing",
+        "Privileged access is requested",
+        "Known active outage is matched",
+        "Business impact is unclear",
+        "AI recommendation explicitly requires review",
+      ],
+      autoRoute: [
+        "Priority is P3 or P4",
+        "Confidence score is at least 0.85",
+        "Resolver group is known",
+        "Category is not Security",
+        "No privileged access is requested",
+        "No major outage signal is detected",
+      ],
+    },
+    businessValue: [
+      "Faster IT triage from unstructured requests",
+      "More consistent priority and routing decisions",
+      "Less manual coordination between service desk and resolver teams",
+      "Safer automation through human review for high-risk cases",
+      "Better auditability with full decision trail logging",
+      "Clear requester and resolver communication",
+      "Better visibility into repeated IT issues and routing quality",
+    ],
+    extensions: [
+      "Connect ServiceNow or Jira for live ticket creation",
+      "Add Microsoft Teams approval workflow",
+      "Add Okta or Azure AD user context lookup",
+      "Connect real CMDB for system criticality and ownership",
+      "Add PagerDuty or monitoring integration for outage correlation",
+      "Add runbook recommendation based on incident category",
+      "Add recurring follow-up for overdue P1/P2 incidents",
+      "Build IT lead dashboard for routing quality and override rate",
+    ],
+    governance: [
+      "Least data required — only process fields needed for triage",
+      "Purpose limitation — workflow used only for IT incident triage",
+      "Human approval required for high-risk actions and P1/P2 cases",
+      "No autonomous security or access changes",
+      "Audit trail captures AI output, policy decision, and final action",
+      "Confidence score and review reason recorded for every case",
+      "Low-confidence recommendations always pause for human review",
+    ],
+    seoTitle:
+      "Day 6: IT Incident Triage Agent with Human Review | Langdock Use Cases",
+    seoDescription:
+      "A Langdock workflow that triages messy IT requests with enterprise context enrichment, policy-gated auto-routing, human review for risky cases, and full audit logging.",
+    images: imagePaths(6),
   },
 ];
 

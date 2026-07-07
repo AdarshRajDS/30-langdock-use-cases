@@ -7,6 +7,7 @@ import { BusinessValueCards } from "@/components/use-cases/BusinessValueCards";
 import { ExtensionIdeas } from "@/components/use-cases/ExtensionIdeas";
 import { UseCaseImagesSection } from "@/components/use-cases/ImageBlock";
 import { RiskLogicSection } from "@/components/use-cases/RiskLogicSection";
+import { PolicyGateSection } from "@/components/use-cases/PolicyGateSection";
 import { GovernanceSection } from "@/components/use-cases/GovernanceSection";
 import { UseCaseNav } from "@/components/use-cases/UseCaseNav";
 import {
@@ -171,6 +172,10 @@ export default async function UseCasePage({ params }: PageProps) {
 
             {useCase.riskLogic && (
               <RiskLogicSection riskLogic={useCase.riskLogic} />
+            )}
+
+            {useCase.policyGate && (
+              <PolicyGateSection policyGate={useCase.policyGate} />
             )}
 
             <BusinessValueCards values={useCase.businessValue} />

@@ -31,6 +31,11 @@ export interface UseCaseRiskLogic {
   low: string[];
 }
 
+export interface UseCasePolicyGate {
+  humanReview: string[];
+  autoRoute: string[];
+}
+
 export interface UseCase {
   day: number;
   title: string;
@@ -51,6 +56,8 @@ export interface UseCase {
   categoryLabel?: string;
   /** Optional risk classification rules */
   riskLogic?: UseCaseRiskLogic;
+  /** Optional policy gate rules for human review vs auto-route */
+  policyGate?: UseCasePolicyGate;
   /** Optional governance and responsible AI notes */
   governance?: string[];
   /** Optional SEO overrides */

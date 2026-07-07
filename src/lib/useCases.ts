@@ -73,6 +73,10 @@ export function getNavSections(useCase: UseCase) {
     sections.push({ id: "risk-logic", label: "Risk logic" });
   }
 
+  if (useCase.policyGate) {
+    sections.push({ id: "policy-gate", label: "Policy gate" });
+  }
+
   sections.push(
     { id: "business-value", label: "Business value" },
     { id: "extensions", label: "Extensions" }
