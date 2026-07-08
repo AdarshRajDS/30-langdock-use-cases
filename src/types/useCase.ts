@@ -12,7 +12,8 @@ export type UseCaseCategory =
   | "Customer Support"
   | "Data Workflows"
   | "Operations"
-  | "Finance";
+  | "Finance"
+  | "AI Governance";
 
 export interface UseCaseImages {
   workflowImage?: string;

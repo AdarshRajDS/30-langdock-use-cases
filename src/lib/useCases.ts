@@ -105,6 +105,7 @@ export function getCategoryIcon(category: UseCaseCategory): string {
     "Data Workflows": "◒",
     Operations: "◓",
     Finance: "◔",
+    "AI Governance": "◕",
   };
   return icons[category];
 }

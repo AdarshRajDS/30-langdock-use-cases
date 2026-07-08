@@ -6,7 +6,7 @@ function dayFolder(day: number): string {
 
 function imagePaths(day: number) {
   const folder = `/use-cases/day-${dayFolder(day)}`;
-  const version = "v8";
+  const version = "v9";
   return {
     workflowImage: `${folder}/workflow.png?${version}`,
     architectureDiagram: `${folder}/architecture.png?${version}`,
@@ -713,6 +713,120 @@ export const useCases: UseCase[] = [
       "A Langdock workflow that detects possible revenue leakage by comparing invoices with contract terms, usage records, discount rules, and approval status before invoices are finalized.",
     images: imagePaths(7),
   },
+  {
+    day: 8,
+    title: "AI Output Debt Prevention Agent",
+    slug: "ai-output-debt-prevention-agent",
+    category: "AI Governance",
+    status: "published",
+    summary:
+      "A Langdock workflow that reviews AI-generated business content before it creates unsupported claims, compliance risk, pricing errors, or approval gaps.",
+    businessProblem:
+      "Teams are now using AI to create proposals, reports, emails, customer responses, analysis, and internal documents faster than ever.\n\nBut most companies do not have a structured review process for AI-generated work. That creates a new kind of operational risk: AI output debt.\n\nAI-generated content can contain unsupported claims, missing sources, incorrect pricing, outdated product statements, risky legal wording, compliance overclaims, or unapproved customer commitments.\n\nThe problem is not that employees use AI. The problem is that AI-generated work can enter the business without quality checks, approval, ownership, or an audit trail.",
+    whyItMatters: [
+      "A single bad AI-generated customer proposal can include wrong pricing, unsupported performance claims, risky compliance statements, or unapproved commitments.",
+      "At scale, poor-quality AI content spreads across teams while unsupported claims enter customer communication.",
+      "Compliance and legal exposure increases when AI overclaims on regulations, data hosting, or product capabilities.",
+      "Teams lose track of what was AI-generated and human review becomes inconsistent across departments.",
+      "Business decisions increasingly rely on unverified outputs — creating AI workflow debt that compounds over time.",
+    ],
+    workflow: [
+      "User submits an AI-generated business artifact (proposal, report, email, or analysis)",
+      "Langdock classifies the artifact type and flags pricing, compliance, and security review needs",
+      "Langdock extracts material claims from the artifact text",
+      "Langdock checks whether claims are supported by approved sources and knowledge",
+      "Langdock detects risky legal, compliance, pricing, and product language",
+      "Langdock assigns a risk score and returns a decision: Approved, Needs Review, or Blocked",
+      "Langdock routes the artifact to the right human reviewer (Sales Ops, Legal, Security, Product Marketing, or Account Owner)",
+      "Langdock generates a safe rewrite suggestion where issues are detected",
+      "Langdock logs the review result, risk score, and decision for auditability",
+    ],
+    architecture: {
+      description:
+        "AI-generated artifacts enter Langdock as an AI Output Quality Gate. The workflow classifies content, extracts claims, validates against approved knowledge and business rules, detects risky language, classifies review outcome, routes to human reviewers, and logs every decision for governance and auditability.",
+      steps: [
+        "Trigger: AI artifact submitted",
+        "Classify artifact and extract material claims",
+        "Validate sources, pricing rules, and product facts",
+        "Detect risky legal, compliance, and security language",
+        "Agent decision: Approved / Needs Review / Blocked",
+        "Route to Sales Ops, Legal, Security, or Product Marketing",
+        "Audit log and follow-up",
+      ],
+      diagramCaption:
+        "Langdock acts as a control layer for enterprise AI adoption — reviewing AI-generated work against business rules before it reaches customers or internal stakeholders.",
+    },
+    tools: [
+      "Langdock Workflow",
+      "Langdock Agent",
+      "Approved knowledge base",
+      "Pricing and product fact rules",
+      "Slack (review routing notifications)",
+      "Exception / review log (Airtable or Google Sheets)",
+    ],
+    langdockRole: [
+      "Acts as an AI Output Quality Gate before artifacts are used in business communication",
+      "Accepts AI-generated proposals, reports, emails, and analysis from users or workflows",
+      "Applies consistent review rules against approved company knowledge and business controls",
+      "Extracts material claims and checks source support, pricing rules, and product facts",
+      "Detects risky legal, compliance, security, and customer commitment language",
+      "Classifies risk and returns Approved, Needs Review, or Blocked with a risk score",
+      "Routes artifacts to the right human reviewers and generates safe rewrite suggestions",
+      "Logs every review decision for governance, auditability, and follow-up",
+    ],
+    riskLogic: {
+      high: [
+        "Blocked — Critical risk with unsupported claims or unverified commitments",
+        "Unsupported performance guarantees or unrealistic implementation promises",
+        "Unverified pricing, usage terms, or broad compliance overclaims",
+        "Unverified data-hosting, privacy, or security claims requiring immediate review",
+      ],
+      medium: [
+        "Needs Review — material issues detected but not fully blocking",
+        "Missing source references for key product or performance statements",
+        "Pricing or terms require Sales Ops confirmation before customer use",
+        "Compliance or legal wording flagged for specialist review",
+      ],
+      low: [
+        "Approved — artifact aligns with approved knowledge and business rules",
+        "Claims supported by sources with no risky language detected",
+        "No material pricing, compliance, or commitment issues identified",
+        "Case logged for audit trail without escalation required",
+      ],
+    },
+    businessValue: [
+      "Prevents risky AI-generated work from reaching customers",
+      "Reduces unsupported claims in proposals, reports, and emails",
+      "Protects pricing and margin from unverified AI-generated terms",
+      "Reduces legal and compliance exposure from overclaimed statements",
+      "Improves trust in AI-generated business content across teams",
+      "Creates a review trail for AI-assisted work and human approvals",
+      "Helps companies scale AI usage safely with governed workflow execution",
+    ],
+    extensions: [
+      "Connect approved knowledge base from Confluence, Notion, or Google Drive",
+      "Integrate legal playbook and compliance rule libraries",
+      "Add Salesforce or HubSpot CRM context for account-specific review",
+      "Add Microsoft Teams approval workflow for reviewer sign-off",
+      "Connect product marketing approved messaging catalog",
+      "Add recurring review quality dashboard and override rate tracking",
+      "Add customer-facing artifact versioning and approval history",
+      "Package review logic as a reusable Langdock skill across departments",
+    ],
+    governance: [
+      "Human review required before customer-facing use of flagged artifacts",
+      "Approved knowledge only — no guessing on pricing, compliance, or product facts",
+      "Does not automatically send customer communication or approve commitments",
+      "Pricing and compliance checks applied before any Approved decision",
+      "Every review decision, risk score, and rewrite suggestion is logged",
+      "Purpose-limited to AI output quality review and governance only",
+    ],
+    seoTitle:
+      "Day 8: AI Output Debt Prevention Agent | Langdock Use Cases",
+    seoDescription:
+      "A Langdock workflow that reviews AI-generated proposals, reports, and emails for unsupported claims, compliance risk, pricing errors, and approval gaps before they create business damage.",
+    images: imagePaths(8),
+  },
 ];
 
 export const categories: UseCaseCategory[] = [
@@ -728,4 +842,5 @@ export const categories: UseCaseCategory[] = [
   "Data Workflows",
   "Operations",
   "Finance",
+  "AI Governance",
 ];
