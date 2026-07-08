@@ -6,7 +6,7 @@ function dayFolder(day: number): string {
 
 function imagePaths(day: number) {
   const folder = `/use-cases/day-${dayFolder(day)}`;
-  const version = "v7";
+  const version = "v8";
   return {
     workflowImage: `${folder}/workflow.png?${version}`,
     architectureDiagram: `${folder}/architecture.png?${version}`,
@@ -594,6 +594,125 @@ export const useCases: UseCase[] = [
       "A Langdock workflow that triages messy IT requests with enterprise context enrichment, policy-gated auto-routing, human review for risky cases, and full audit logging.",
     images: imagePaths(6),
   },
+  {
+    day: 7,
+    title: "Contract-to-Cash Revenue Leakage Monitor",
+    slug: "contract-to-cash-revenue-leakage-monitor",
+    category: "Finance",
+    categoryLabel: "Finance / Revenue Operations / Billing Controls",
+    status: "published",
+    summary:
+      "A Langdock workflow that checks invoices against contract terms, usage records, customer data, discount rules, and approval status to detect possible revenue leakage before invoices are finalized.",
+    businessProblem:
+      "Finance teams often lose revenue silently when contract terms, CRM deal data, invoices, usage records, discounts, and approvals do not match. These issues are usually discovered too late during month-end close, customer disputes, or manual billing reviews.\n\nA customer invoice is created based on a contract, CRM deal, usage record, and approved commercial terms. In theory, all of these should match. In practice, the data is often spread across spreadsheets, contracts, finance tools, CRM notes, and approval records.\n\nSetup fees can be missed, expired discounts can continue, payment terms can be incorrect, usage overage may not be billed, and approvals may be missing. Individually these look like small finance issues, but repeated across customers they create real revenue leakage and weak audit visibility.",
+    whyItMatters: [
+      "Contract terms, CRM deal data, invoices, usage records, discounts, and approvals are rarely checked together before an invoice is released.",
+      "Missed setup fees, expired discounts, and unbilled usage overage erode margin one invoice at a time.",
+      "Incorrect payment terms and missing approvals create month-end revenue variance and dispute risk.",
+      "Manual billing reviews during close are too late to prevent leakage — they only surface it after the fact.",
+      "Without a structured exception log, finance teams lack audit visibility into recurring billing control gaps.",
+    ],
+    workflow: [
+      "Manual or scheduled invoice review trigger starts the workflow",
+      "List invoices sheet and select the target invoice row",
+      "List customers sheet and select the matching customer row",
+      "List contracts sheet and select the active signed contract",
+      "List usage sheet and select usage for the billing period",
+      "List approvals sheet and select approvals linked to the invoice",
+      "Compute exceptions and risk by comparing invoice, contract, usage, and approval data",
+      "Call Revenue Leakage Control Agent for finance-ready summary and recommended action",
+      "Route by risk level (Critical, High, Medium, Low, or No risk)",
+      "Send Slack alert to finance manager for Critical or High risk cases",
+      "Create optional Gmail draft for finance follow-up communication",
+      "Prepare and append exception log row for audit trail",
+      "Final summary confirms case status and follow-up ownership",
+    ],
+    architecture: {
+      description:
+        "Finance data sources feed invoice, customer, contract, usage, and approval records into Langdock. The workflow validates contract-to-cash rules, detects exceptions, classifies leakage risk, calls the Revenue Leakage Control Agent, routes alerts by severity, and logs every case for follow-up.",
+      steps: [
+        "Trigger: invoice or scheduled billing review",
+        "Google Sheets lookups (invoice, customer, contract, usage, approvals)",
+        "Validate billing control rules",
+        "Compute exceptions and estimate leakage risk",
+        "Revenue Leakage Control Agent reasoning",
+        "Risk routing and Slack finance alert",
+        "Exception log and follow-up",
+      ],
+      diagramCaption:
+        "Langdock acts as the finance control layer between scattered contract-to-cash data and finance actions, with human review before any invoice or pricing change.",
+    },
+    tools: [
+      "Langdock Agent",
+      "Langdock Workflow",
+      "Google Sheets (mock finance data)",
+      "Slack (finance manager alerts)",
+      "Gmail draft (optional)",
+      "Excel / Google Sheets mock finance system",
+    ],
+    langdockRole: [
+      "Acts as the finance control layer between scattered business data and finance actions",
+      "Reads invoice, customer, contract, usage, and approval data from Google Sheets",
+      "Validates contract-to-cash billing rules including fees, discounts, terms, and usage",
+      "Detects exceptions and estimates leakage risk before invoices are finalized",
+      "Calls the Revenue Leakage Control Agent to produce audit-ready finance summaries",
+      "Classifies risk and recommends internal action for human finance review",
+      "Routes Critical and High risk cases to Slack alerts and optional Gmail drafts",
+      "Writes every exception to a structured log for follow-up and audit visibility",
+    ],
+    riskLogic: {
+      high: [
+        "Critical or High leakage risk with material revenue impact",
+        "Missed setup fee, expired discount, or unbilled usage overage detected",
+        "Invoice amount materially differs from contract terms",
+        "Required commercial approval is missing before invoice release",
+      ],
+      medium: [
+        "Medium risk exception requiring finance review before release",
+        "Payment terms mismatch or partial discount validity concern",
+        "Usage data incomplete but potential overage signal present",
+        "Finance owner review recommended before customer-facing action",
+      ],
+      low: [
+        "Low or no leakage risk — invoice aligns with contract and approvals",
+        "Minor data gap flagged but no material revenue impact identified",
+        "Case logged for audit trail without immediate alert required",
+      ],
+    },
+    businessValue: [
+      "Reduces underbilling risk before invoices are finalized",
+      "Catches invoice mistakes earlier in the billing cycle",
+      "Improves contract-to-cash control across finance and revenue operations",
+      "Protects revenue and margin from silent leakage",
+      "Creates a structured finance exception log for follow-up",
+      "Improves audit visibility into billing control decisions",
+      "Connects billing, finance, sales, and customer operations in one workflow",
+      "Supports human review before financial decisions and customer communication",
+    ],
+    extensions: [
+      "Replace Google Sheets with Xero, QuickBooks, NetSuite, SAP, Dynamics, or ERPNext",
+      "Connect CRM data from HubSpot or Salesforce",
+      "Add contract PDF extraction from Google Drive",
+      "Add Stripe or Chargebee usage billing checks",
+      "Add follow-up reminders for open exceptions",
+      "Add approval workflow for finance managers",
+      "Add monthly revenue leakage reporting dashboard",
+      "Add customer renewal risk impact analysis",
+    ],
+    governance: [
+      "Does not approve invoices, issue refunds, or change pricing automatically",
+      "Does not send customer-facing financial communication without human review",
+      "Prepares internal finance summaries and alerts for human decision-making",
+      "Human review required before invoice changes, refunds, or pricing exceptions",
+      "Every exception, risk classification, and agent recommendation is logged",
+      "Purpose-limited to contract-to-cash revenue leakage monitoring only",
+    ],
+    seoTitle:
+      "Day 7: Contract-to-Cash Revenue Leakage Monitor | Langdock Use Cases",
+    seoDescription:
+      "A Langdock workflow that detects possible revenue leakage by comparing invoices with contract terms, usage records, discount rules, and approval status before invoices are finalized.",
+    images: imagePaths(7),
+  },
 ];
 
 export const categories: UseCaseCategory[] = [
@@ -608,4 +727,5 @@ export const categories: UseCaseCategory[] = [
   "Customer Support",
   "Data Workflows",
   "Operations",
+  "Finance",
 ];

@@ -104,6 +104,7 @@ export function getCategoryIcon(category: UseCaseCategory): string {
     "Customer Support": "◑",
     "Data Workflows": "◒",
     Operations: "◓",
+    Finance: "◔",
   };
   return icons[category];
 }
